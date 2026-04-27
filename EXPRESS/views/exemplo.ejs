@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Exemplo EJS</title>
+</head>
+<body>
+  <table border="1">
+    <% pessoas.forEach(function(p) { %>
+      <tr>
+        <td><%= p.nome %></td>
+        <td><%= p.idade %></td>
+      </tr>
+    <% }); %>
+  </table>
+</body>
+</html>

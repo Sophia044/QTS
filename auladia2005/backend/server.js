@@ -22,6 +22,27 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+// POST /api/login
+app.post('/api/login', async (req, res) => {
+    try {
+        const { login, senha } = req.body;
+        if (!login || !senha) {
+            return res.status(400).json({ error: 'Campos obrigatórios' });
+        }
+        const [rows] = await db.execute(
+            'SELECT id, login FROM usuarios WHERE login = ? AND senha = ?',
+            [login, senha]
+        );
+        if (rows.length > 0) {
+            res.json({ success: true, user: rows[0] });
+        } else {
+            res.status(401).json({ error: 'Login ou senha incorretos' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // GET /api/funcionarios
 app.get('/api/funcionarios', async (req, res) => {
     try {

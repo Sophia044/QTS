@@ -126,5 +126,35 @@ async function loadItens() {
     })
 }
 
-// Inicializa a tabela ao carregar a página
-loadItens()
+// Elementos de Login
+const loginForm = document.getElementById('loginForm');
+const loginView = document.getElementById('loginView');
+const appView = document.getElementById('appView');
+const loginError = document.getElementById('loginError');
+
+loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const login = document.getElementById('l-login').value;
+    const senha = document.getElementById('l-senha').value;
+
+    try {
+        const response = await fetch('http://localhost:3000/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ login, senha })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+            loginView.style.display = 'none';
+            appView.style.display = 'block';
+            loadItens();
+        } else {
+            loginError.textContent = data.error || 'Erro ao realizar login';
+        }
+    } catch (error) {
+        console.error('Erro no login:', error);
+        loginError.textContent = 'Erro ao conectar ao servidor.';
+    }
+});
